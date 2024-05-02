@@ -1,0 +1,239 @@
+<h1> hello guys welocme to bst examination </h1>
+
+<h1>dht sensor </h1>
+<p>#include <DHT.h>
+
+    #define DHTPIN 2       // Digital pin connected to the DHT sensor
+    #define DHTTYPE DHT11  // DHT 11
+    
+    DHT dht(DHTPIN, DHTTYPE);
+    
+    void setup() {
+      Serial.begin(9600);
+      Serial.println("DHT11 Temperature and Humidity Sensor Test");
+    
+      dht.begin();
+    }
+    
+    void loop() {
+      delay(2000);
+    
+      float temperature = dht.readTemperature(); // Reading temperature in Celsius
+      float humidity = dht.readHumidity();       // Reading humidity
+    
+      if (isnan(temperature) || isnan(humidity)) {
+        Serial.println("Failed to read from DHT sensor!");
+        return;
+      }
+    
+      Serial.print("Temperature: ");
+      Serial.print(temperature);
+      Serial.print(" °C\t");
+      Serial.print("Humidity: ");
+      Serial.print(humidity);
+      Serial.println(" %");
+    }
+    </p>
+
+    <h1>lm35 sensor </h1>
+<p>// Pin connected to the LM35 sensor
+    const int LM35_PIN = A0;
+    
+    void setup() {
+      Serial.begin(9600);
+    }
+    
+    void loop() {
+      // Read the analog value from LM35 sensor
+      int sensorValue = analogRead(LM35_PIN);
+      
+      // Convert the analog value to temperature in Celsius
+      float temperature = (sensorValue * 0.48875); // 10mV per degree Celsius
+    
+      // Print temperature to the serial monitor
+      Serial.print("Temperature: ");
+      Serial.print(temperature);
+      Serial.println(" °C");
+    
+      delay(1000); // Wait for a second before taking another reading
+    }
+    </p>
+<h1>pulse rate sensor </h1>
+    <p>
+        const int ppgPin = A0;  // Analog pin connected to the PPG sensor
+unsigned long previousMillis = 0;  // Variable to store the previous time
+const long interval = 1000;  // Interval at which to measure heart rate (in milliseconds)
+
+void setup() {
+  Serial.begin(9600);  // Initialize serial communication
+}
+
+void loop() {
+  unsigned long currentMillis = millis();  // Get the current time
+  int sensorValue = analogRead(ppgPin);  // Read the analog value from the PPG sensor
+  
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;  // Update the previous time
+    
+    // Calculate heart rate (beats per minute)
+    float heartRate = calculateHeartRate(sensorValue);
+    
+    // Print heart rate to the serial monitor
+    Serial.print("Heart Rate: ");
+    Serial.print(heartRate);
+    Serial.println(" BPM");
+  }
+}
+
+float calculateHeartRate(int sensorValue) {
+  // Modify this function according to your sensor's characteristics
+  // This is a simple example, you may need to calibrate for your specific sensor
+  // You may also need to filter and process the sensor data more thoroughly
+  
+  // Perform calculations to convert sensor value to heart rate
+  // This is just a placeholder calculation
+  float heartRate = map(sensorValue, 0, 1023, 60, 120);  // Example mapping function
+  
+  return heartRate;
+}
+
+    </p>
+
+<h1>felxiforce sensor </h1>
+    <p>int fsrPin = A0; // FlexiForce sensor connected to analog pin A0
+        int fsrReading; // Variable to store the analog reading
+        float fsrVoltage; // Variable to store the voltage from the sensor
+        float fsrResistance; // Variable to store the calculated resistance
+        
+        void setup() {
+          Serial.begin(9600); // Initialize serial communication
+        }
+        
+        void loop() {
+          fsrReading = analogRead(fsrPin); // Read the analog value from the sensor
+        
+          // Convert the analog reading to a voltage value
+          fsrVoltage = fsrReading * (5.0 / 1023.0); // Assuming a 5V supply
+        
+          // Calculate the resistance using the voltage divider formula
+          fsrResistance = (5.0 - fsrVoltage) / fsrVoltage * 10000.0; // Assuming a 10K resistor in parallel
+        
+          // Convert the analog reading to a force value (adjust the calibration as needed)
+          int force = map(fsrReading, 0, 1023, 0, 100); // Assuming a force range of 0 to 100 units
+        
+          Serial.print("Force: ");
+          Serial.print(force);
+          Serial.print(" Resistance: ");
+          Serial.print(fsrResistance);
+          Serial.println(" Ohms");
+        
+          delay(100); // Delay for stability
+        }</p>
+
+<h1>galvanic skin resistance</h1>
+        <p>
+            int GSR_PIN = A0; // GSR sensor connected to analog pin A0
+            int GSR_VALUE; // Variable to store the GSR value
+            
+            void setup() {
+              Serial.begin(9600); // Initialize serial communication
+            }
+            
+            void loop() {
+              GSR_VALUE = analogRead(GSR_PIN); // Read the analog value from the GSR sensor
+            
+              // Convert the analog reading to a resistance value (adjust the calibration as needed)
+              float GSR_RESISTANCE = (1023.0 / GSR_VALUE) * 10000.0; // Assuming a 10K resistor in the voltage divider circuit
+            
+              Serial.print("Galvanic Skin Resistance (GSR): ");
+              Serial.print(GSR_RESISTANCE);
+              Serial.println(" Ohms");
+            
+              delay(100); // Delay for stability
+            }   
+        </p>
+<h1>measurement of ph</h1>
+        <p>int pHPin = A0; // pH sensor connected to analog pin A0
+            float pHValue; // Variable to store the pH value
+            
+            void setup() {
+              Serial.begin(9600); // Initialize serial communication
+            }
+            
+            void loop() {
+              int sensorValue = analogRead(pHPin); // Read the analog value from the pH sensor
+              
+              // Convert the analog reading to pH value (adjust the calibration as needed)
+              pHValue = 3.5 * sensorValue * (5.0 / 1024.0); // Assuming a pH range of 0-14 and 5V supply
+            
+              Serial.print("pH Value: ");
+              Serial.println(pHValue);
+            
+              delay(1000); // Delay for 1 second
+            }</p>
+<h1>ultrasonic swnsor</h1>
+            <p>
+                // Define the pin connections for the ultrasonic sensor
+const int trigPin = 9;
+const int echoPin = 10;
+
+// Variables to store the duration and distance
+long duration;
+int distance;
+
+void setup() {
+  // Initialize serial communication
+  Serial.begin(9600);
+
+  // Set the trig pin as an output and echo pin as an input
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  // Clear the trig pin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Set the trig pin HIGH for 10 microseconds to initiate the ultrasonic burst
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the echo pin and calculate the duration of the ultrasonic pulse
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate the distance in centimeters
+  distance = duration * 0.034 / 2;
+
+  // Print the distance to the serial monitor
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  delay(100); // Wait for 100 milliseconds before taking the next measurement
+}
+            </p>
+
+<h1>vernier spirometry</h1>
+<p>const int sensorPin = A0; // Analog pin connected to the spirometry sensor
+    float calibrationFactor = 1.0; // Calibration factor for adjusting sensor readings
+    
+    void setup() {
+      Serial.begin(9600);
+    }
+    
+    void loop() {
+      // Read analog input from spirometry sensor
+      int sensorValue = analogRead(sensorPin);
+    
+      // Convert analog reading to spirometry parameter (volume, flow rate, etc.) based on calibration
+      float spirometryValue = sensorValue * calibrationFactor;
+    
+      // Output spirometry measurement
+      Serial.print("Spirometry Measurement: ");
+      Serial.println(spirometryValue);
+    
+      delay(1000); // Adjust delay as needed
+    }
+    </p>
